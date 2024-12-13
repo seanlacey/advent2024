@@ -114,7 +114,7 @@ rm(move_map, cur_col, cur_row, guard_coord, guard_found, i)
 # Part 2 ------------------------------------------------------------------
 ### Function to combine rows, columns, direction for quick history check
 historic_value <- function(guard_coord) {
-  return(paste0(guard_coord[1], guard_coord[2], guard_coord[3]))
+  return(paste(guard_coord[1], guard_coord[2], guard_coord[3], sep = ","))
 }
 
 loop_vec <- c()
@@ -129,14 +129,14 @@ for (step_num in 2:(length(guard_path) - 1)) {
   obstacle_loc <- guard_path[[step_num]][-c(3, 4)]
   
   ### If obstacle location would be same as starting spot, skip it
-  if (paste0(obstacle_loc[1], obstacle_loc[2]) == 
-      paste0(guard_start[1], guard_start[2])) {
+  if (paste(obstacle_loc[1], obstacle_loc[2], sep = ",") == 
+      paste(guard_start[1], guard_start[2], sep = ",")) {
     next
   }
   
   ### If obstacle location would be same as spot right in front of guard, skip it
-  if (paste0(obstacle_loc[1], obstacle_loc[2]) == 
-      paste0(guard_path[[2]][1], guard_path[[2]][2])) {
+  if (paste(obstacle_loc[1], obstacle_loc[2], sep = ",") == 
+      paste(guard_path[[2]][1], guard_path[[2]][2], sep = ",")) {
     next
   }
   
@@ -165,7 +165,7 @@ for (step_num in 2:(length(guard_path) - 1)) {
   loop_vec <- c(loop_vec,ifelse(guard_coord[4] == 0, 1, 0))
   
   if (guard_coord[4] == 0) {
-    obstacle_vec <- c(obstacle_vec, paste0(obstacle_loc[1], obstacle_loc[2]))
+    obstacle_vec <- c(obstacle_vec, paste(obstacle_loc[1], obstacle_loc[2], sep = ","))
   }
 }
 
@@ -176,3 +176,85 @@ length(obstacle_vec)
 obstacle_vec_u <- unique(obstacle_vec)
 
 length(obstacle_vec_u)
+
+
+
+####################
+
+
+
+# ### Route check function
+# obstacle_check <- function(x) {
+#   testI <<- testI + 1
+#   print(testI)
+#   
+#   ### Reset move map
+#   move_map <- in_data
+#   
+#   ###Save initial guard
+#   guard_coord_init <- c(x[1], x[2], x[3], 0)
+#   guard_coord <- guard_coord_init
+#   
+#   ###Save obstacle location
+#   obstacle <- c(guard_coord_init[1] + moves[[guard_coord_init[3]]][1],
+#                 guard_coord_init[2] + moves[[guard_coord_init[3]]][2])
+#   
+#   ### If obstacle is out of bounds then stop here
+#   if (obstacle[1] < 1 | obstacle[1] > num_row |
+#       obstacle[2] < 1 | obstacle[2] > num_col) {
+#     obstacle_vec <- c(0, 0, 0)
+#     
+#     return(obstacle_vec)
+#   }
+#   
+#   ###Only proceed if guard is in bounds and obstacle not in front
+#   if (((guard_coord[1] > 1 & guard_coord[1] <= num_row) & 
+#        (guard_coord[2] > 1 & guard_coord[2] <= num_col)) &
+#       (move_map[obstacle[1], obstacle[2]] != "#")) {
+#     
+#     ###Change current direction, assuming path ahead is blocked
+#     guard_coord[3] <- ifelse(guard_coord_init[3] == 4, 1, guard_coord_init[3] + 1)
+#     
+#     direction_change <- 0
+#     loop_yn <- 0
+#     
+#     ### Loop through guard movements, tracking direction
+#     ### Stop when new move takes them out of bounds, or loop
+#     ### is detected
+#     while (1 == 1) {
+#       guard_coord <- guard_move(guard_coord)
+#       
+#       ### if new move took them out of bounds stop
+#       if (guard_coord[4] == 1) {
+#         break
+#       }
+#       
+#       ###Update count for move_map
+#       ###This is for detecting loops not involving the original spot
+#       ###I'm assuming that if I'm crossing the same spot more than 100 times then it's stuck in an 
+#       ###infinite loop
+#       move_map[guard_coord[1], guard_coord[2]] <- ifelse(move_map[guard_coord[1], guard_coord[2]] == "." |
+#                                                            move_map[guard_coord[1], guard_coord[2]] == "^", "1",
+#                                                          as.character(as.numeric(move_map[guard_coord[1], guard_coord[2]]) + 1))
+#       
+#       if (as.numeric(move_map[guard_coord[1], guard_coord[2]]) > 100) {
+#         loop_yn <- 1
+#         break
+#       }
+#       
+#       if (guard_coord[1] == guard_coord_init[1] &
+#           guard_coord[2] == guard_coord_init[2] &
+#           guard_coord[3] == guard_coord_init[3]) {
+#         loop_yn <- 1
+#         break
+#       } 
+#     }
+#     
+#     obstacle_vec <- c( obstacle[1], obstacle[2], loop_yn)
+#   } else {
+#     ### Default no for out of bounds obstacle
+#     obstacle_vec <- c(0, 0, 0)
+#   }
+#   
+#   return(obstacle_vec)
+# }
