@@ -4,7 +4,7 @@ library(stringr)
 library(R6)
 
 ##Read in data
-input_file <- "example_small.txt"
+input_file <- "input.txt"
 
 ###Get map dimensions
 map_rows <- which(readLines(paste0("day15/data/",input_file), warn = FALSE) == "") - 1
