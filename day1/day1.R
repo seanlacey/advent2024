@@ -3,7 +3,7 @@ library(dplyr)
 library(purrr)
 
 ### Total Distnace
-in_data <- read.table("day1/data/input.txt")
+in_data <- read.table("~/Documents/GitHub/advent2024/day1/data/input.txt")
 
 list1 <- in_data[, 1] %>%
   sort
